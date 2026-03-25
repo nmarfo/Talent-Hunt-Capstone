@@ -1,0 +1,18 @@
+{% extends "pages/base.html" %}
+
+{% block title %}Home | TalentScout{% endblock %}
+
+{% block content %}
+<h1>Discover Talent. Get Discovered.</h1>
+<p>
+    TalentScout is a platform where athletes and other talented individuals can
+    showcase their skills and connect with coaches, scouts, and recruiters.
+</p>
+
+<p>
+    Create your profile, share your achievements, upload your highlights, and
+    let the right people find you.
+</p>
+
+<a href="{% url 'signup' %}" class="btn">Join Now</a>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "pages/base.html" %}
+
+{% block title %}Sign Up | TalentScout{% endblock %}
+
+{% block content %}
+<h1>Create an Account</h1>
+<p>Sign up as talent or coach/scout.</p>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn">Sign Up</button>
+</form>
+{% endblock %}

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}TalentScout{% endblock %}</title>
+    <style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f1f5f9;
+        color: #1e293b;
+    }
+
+    nav {
+        background: #0f172a;
+        padding: 15px 20px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    nav a {
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    nav a:hover {
+        color: #38bdf8;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 1100px;
+        margin: 30px auto;
+    }
+
+    .card {
+        background: white;
+        padding: 25px;
+        border-radius: 14px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    h1, h2, h3 {
+        color: #0f172a;
+        margin-top: 0;
+    }
+
+    p {
+        line-height: 1.6;
+    }
+
+    .btn {
+        display: inline-block;
+        margin-top: 12px;
+        padding: 12px 18px;
+        background: #2563eb;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .btn:hover {
+        background: #1d4ed8;
+    }
+
+    input, select, textarea {
+        width: 100%;
+        padding: 12px;
+        margin-top: 6px;
+        margin-bottom: 15px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 1rem;
+    }
+
+    form {
+        width: 100%;
+    }
+
+    footer {
+        background: #0f172a;
+        color: white;
+        text-align: center;
+        padding: 18px;
+        margin-top: 40px;
+    }
+
+    .talent-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .talent-card {
+        border: 1px solid #dbeafe;
+        border-radius: 10px;
+        padding: 15px;
+        background: #f8fafc;
+    }
+
+    @media (max-width: 900px) {
+        .talent-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 600px) {
+        nav {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .container {
+            width: 95%;
+            margin: 20px auto;
+        }
+
+        .card {
+            padding: 18px;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+        }
+
+        h2 {
+            font-size: 1.4rem;
+        }
+
+        .btn {
+            width: 100%;
+            text-align: center;
+        }
+
+        .talent-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+</head>
+<body>
+    <nav>
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'about' %}">About</a>
+        <a href="{% url 'search_talent' %}">Search Talent</a>
+        <a href="{% url 'contact' %}">Contact</a>
+
+        {% if user.is_authenticated %}
+            <a href="{% url 'dashboard' %}">Dashboard</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+            <a href="{% url 'signup' %}">Sign Up</a>
+            <a href="{% url 'login' %}">Login</a>
+        {% endif %}
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 TalentScout. All rights reserved.</p>
+    </footer>
+</body>
+</html>

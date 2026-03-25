@@ -1,0 +1,14 @@
+{% extends "pages/base.html" %}
+
+{% block title %}Talent Profile | TalentScout{% endblock %}
+
+{% block content %}
+<h1>Create or Edit Talent Profile</h1>
+<p>Fill in your details so coaches and recruiters can find you.</p>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn">Save Profile</button>
+</form>
+{% endblock %}

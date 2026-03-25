@@ -1,0 +1,16 @@
+{% extends "pages/base.html" %}
+
+{% block content %}
+<h1>Dashboard</h1>
+
+<p>Welcome, {{ user.username }}!</p>
+<p>Role: {{ user.role }}</p>
+
+{% if user.role == "talent" %}
+    <p>You are logged in as a talent user.</p>
+    <a href="{% url 'create_profile' %}" class="btn">Create / Edit Profile</a>
+{% else %}
+    <p>You are logged in as a coach/scout.</p>
+    <a href="{% url 'search_talent' %}" class="btn">Search Talent</a>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "pages/base.html" %}
+
+{% block content %}
+
+<h2>Create Talent Profile</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit">Save Profile</button>
+</form>
+
+{% endblock %}
