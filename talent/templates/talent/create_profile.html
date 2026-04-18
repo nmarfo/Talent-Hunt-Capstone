@@ -1,0 +1,51 @@
+{% extends "pages/base.html" %}
+
+{% block title %}Create Profile | TalentScout{% endblock %}
+
+{% block content %}
+
+<h1 style="margin-bottom: 15px;">
+    <i class="fas fa-user-edit"></i> Create / Edit Profile
+</h1>
+
+<p style="margin-bottom: 20px;">
+    Fill in your details to showcase your talent. You can also upload an image and add a highlight video.
+</p>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <!-- FULL NAME -->
+    <label><strong>Full Name</strong></label>
+    {{ form.full_name }}
+
+    <!-- AGE -->
+    <label><strong>Age</strong></label>
+    {{ form.age }}
+
+    <!-- LOCATION -->
+    <label><strong>Location</strong></label>
+    {{ form.location }}
+
+    <!-- CATEGORY -->
+    <label><strong>Category</strong></label>
+    {{ form.category }}
+
+    <!-- BIO -->
+    <label><strong>Bio</strong></label>
+    {{ form.bio }}
+
+    <!-- IMAGE -->
+    <label><strong>Profile Image</strong></label>
+    {{ form.image }}
+
+    <!-- VIDEO -->
+    <label><strong>Video Link (YouTube)</strong></label>
+    {{ form.video_link }}
+
+    <button type="submit" class="btn btn-primary">
+        <i class="fas fa-save"></i> Save Profile
+    </button>
+</form>
+
+{% endblock %}

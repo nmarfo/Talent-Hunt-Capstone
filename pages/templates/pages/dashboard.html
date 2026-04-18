@@ -1,0 +1,31 @@
+{% extends "pages/base.html" %}
+
+{% block title %}Dashboard | TalentScout{% endblock %}
+
+{% block content %}
+<h1>Dashboard</h1>
+
+<p>Welcome, {{ user.username }}!</p>
+<p><strong>Role:</strong> {{ user.role }}</p>
+
+{% if user.role == 'talent' %}
+    <p>You are logged in as a talent user.</p>
+
+    <a href="{% url 'create_profile' %}" class="btn btn-primary">
+        <i class="fas fa-user-edit"></i> Create / Edit Profile
+    </a>
+
+    {% if user.talentprofile %}
+        <a href="{% url 'talent_detail' user.talentprofile.pk %}" class="btn btn-secondary">
+            <i class="fas fa-id-card"></i> View My Profile
+        </a>
+    {% endif %}
+
+{% elif user.role == 'coach' %}
+    <p>You are logged in as a coach/scout.</p>
+
+    <a href="{% url 'talent_list' %}" class="btn btn-secondary">
+        <i class="fas fa-search"></i> Browse Talent
+    </a>
+{% endif %}
+{% endblock %}

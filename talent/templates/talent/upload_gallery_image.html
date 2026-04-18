@@ -1,0 +1,16 @@
+{% extends "pages/base.html" %}
+
+{% block title %}Upload Gallery Image | TalentScout{% endblock %}
+
+{% block content %}
+<h1>Upload Gallery Image</h1>
+<p>Add more images to showcase your talent, tools, equipment, or achievements.</p>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">
+        <i class="fas fa-image"></i> Upload Image
+    </button>
+</form>
+{% endblock %}

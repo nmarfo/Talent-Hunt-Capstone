@@ -1,0 +1,75 @@
+{% extends "pages/base.html" %}
+
+{% block title %}Talent List | TalentScout{% endblock %}
+
+{% block content %}
+<h1>Available Talent</h1>
+
+<form method="get" style="margin-bottom: 20px;">
+    <label for="category"><strong>Category:</strong></label>
+    <select name="category" id="category">
+        <option value="">All</option>
+        <option value="football">Football</option>
+        <option value="basketball">Basketball</option>
+        <option value="music">Music</option>
+        <option value="dance">Dance</option>
+        <option value="acting">Acting</option>
+        <option value="other">Other</option>
+    </select>
+
+    <button type="submit" class="btn btn-primary">Filter</button>
+</form>
+
+<div class="grid grid-3" style="margin-top: 20px;">
+    {% for talent in talents %}
+        <div class="talent-card">
+
+            {% if talent.image %}
+                <img 
+                    src="{{ talent.image.url }}" 
+                    alt="{{ talent.full_name }}" 
+                    style="
+                        width: 100%;
+                        height: 220px;
+                        object-fit: cover;
+                        border-radius: 10px;
+                        margin-bottom: 12px;
+                    "
+                >
+            {% else %}
+                <div style="
+                    width: 100%;
+                    height: 220px;
+                    background: #e2e8f0;
+                    border-radius: 10px;
+                    margin-bottom: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: #64748b;
+                    font-weight: bold;
+                ">
+                    No Image
+                </div>
+            {% endif %}
+
+            <h3 style="margin-bottom: 8px;">
+                <a href="{% url 'talent_detail' talent.pk %}">
+                    {{ talent.full_name }}
+                </a>
+            </h3>
+
+            <p><strong>Category:</strong> {{ talent.category }}</p>
+            <p><strong>Location:</strong> {{ talent.location }}</p>
+            <p><strong>Age:</strong> {{ talent.age }}</p>
+
+            {% if talent.video_link %}
+                <p><strong>Video:</strong> Available</p>
+            {% endif %}
+        </div>
+    {% empty %}
+        <p>No talent profiles found.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}

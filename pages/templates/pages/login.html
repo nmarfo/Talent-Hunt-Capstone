@@ -1,0 +1,14 @@
+{% extends "pages/base.html" %}
+
+{% block title %}Login | TalentScout{% endblock %}
+
+{% block content %}
+<h1>Login</h1>
+<p>Access your account securely.</p>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn">Login</button>
+</form>
+{% endblock %}
