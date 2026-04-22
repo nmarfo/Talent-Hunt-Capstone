@@ -1,13 +1,12 @@
 from django.core.mail import send_mail
 from django.conf import settings
-from .forms import CustomUserCreationForm, ContactForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, ContactForm
 from talent.models import TalentProfile
 
 
@@ -27,8 +26,7 @@ def signup_view(request):
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             messages.success(request, "Account created successfully!")
             return redirect('dashboard')
-        else:
-            messages.error(request, "Please fix the errors below.")
+        messages.error(request, "Please fix the errors below.")
     else:
         form = CustomUserCreationForm()
 
@@ -43,8 +41,7 @@ def login_view(request):
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             messages.success(request, "Login successful!")
             return redirect('dashboard')
-        else:
-            messages.error(request, "Invalid username or password.")
+        messages.error(request, "Invalid username or password.")
     else:
         form = AuthenticationForm()
 
@@ -59,22 +56,11 @@ def logout_view(request):
 
 @login_required
 def dashboard_view(request):
-    return render(request, 'pages/dashboard.html')
+    profile = None
+    if request.user.role == 'talent':
+        profile = TalentProfile.objects.filter(user=request.user).first()
 
-
-def search_talent_view(request):
-    category = request.GET.get('category')
-
-    if category:
-        talents = TalentProfile.objects.filter(category=category)
-    else:
-        talents = TalentProfile.objects.all()
-
-    return render(
-        request,
-        'pages/search_talent.html',
-        {'talents': talents}
-    )
+    return render(request, 'pages/dashboard.html', {'profile': profile})
 
 
 def messages_view(request):
@@ -95,19 +81,20 @@ def contact_view(request):
             send_mail(
                 subject,
                 full_message,
-                email,
-                ['djakipat@gmail.com'],  
+                settings.DEFAULT_FROM_EMAIL,
+                [settings.EMAIL_HOST_USER],
                 fail_silently=False,
             )
 
             messages.success(request, "Your message has been sent successfully!")
             return redirect('contact')
-        else:
-            messages.error(request, "Please correct the errors below.")
+
+        messages.error(request, "Please correct the errors below.")
     else:
         form = ContactForm()
 
     return render(request, 'pages/contact.html', {'form': form})
+
 
 def terms_view(request):
     return render(request, 'pages/terms.html')

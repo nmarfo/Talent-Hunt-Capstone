@@ -3,7 +3,6 @@
 {% block title %}About | TalentScout{% endblock %}
 
 {% block content %}
-
 <section style="
     background: linear-gradient(135deg, #2563eb, #7c3aed, #ec4899);
     color: white;
@@ -12,16 +11,10 @@
     margin-bottom: 40px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.15);
 ">
-    <h1 style="font-size: 2.5rem; margin-bottom: 15px;">
-        About TalentScout
-    </h1>
-
+    <h1 style="font-size: 2.5rem; margin-bottom: 15px;">About TalentScout</h1>
     <p style="font-size: 1.1rem; max-width: 800px; line-height: 1.8;">
-        TalentScout is a talent discovery platform created to connect entertainers,
-        athletes, and creative individuals with coaches, scouts, recruiters, and
-        new opportunities. The goal of the platform is to give talented people a
-        place to showcase their skills, build a strong profile, and be discovered
-        by the right audience.
+        TalentScout is a discovery platform created to connect entertainers, athletes,
+        and creative individuals with coaches, scouts, recruiters, and real opportunities.
     </p>
 </section>
 
@@ -29,94 +22,44 @@
     <div class="grid grid-3">
         <div class="feature-box">
             <h3><i class="fas fa-bullseye"></i> Our Mission</h3>
-            <p>
-                Our mission is to make talent discovery easier, more accessible,
-                and more exciting for both rising talent and professionals looking
-                for the next great opportunity.
-            </p>
+            <p>To make talent discovery easier, more accessible, and more exciting.</p>
         </div>
-
         <div class="feature-box">
             <h3><i class="fas fa-eye"></i> Our Vision</h3>
-            <p>
-                We envision TalentScout becoming a trusted platform where talents
-                from different backgrounds can gain visibility and connect with
-                people who can help them grow.
-            </p>
+            <p>To become a trusted platform where talent gains visibility and opportunity.</p>
         </div>
-
         <div class="feature-box">
             <h3><i class="fas fa-handshake"></i> Our Purpose</h3>
-            <p>
-                TalentScout exists to bridge the gap between talented individuals
-                and the people, teams, or organizations searching for them.
-            </p>
+            <p>To bridge the gap between talented individuals and those searching for them.</p>
         </div>
     </div>
 </section>
 
 <section style="margin-bottom: 40px;">
-    <h2 style="margin-bottom: 20px;">
-        <i class="fas fa-star"></i> What TalentScout Offers
-    </h2>
-
+    <h2 style="margin-bottom: 20px;"><i class="fas fa-star"></i> What TalentScout Offers</h2>
     <div class="grid grid-3">
         <div class="talent-card">
-            <h3>Profile Creation</h3>
-            <p>
-                Users can create talent profiles with personal details, category,
-                images, and highlight videos.
-            </p>
+            <h3>Professional Profiles</h3>
+            <p>Detailed profiles with media, skills, achievements, and social links.</p>
         </div>
-
         <div class="talent-card">
             <h3>Talent Discovery</h3>
-            <p>
-                Coaches, scouts, and recruiters can browse and search for talent
-                across different categories.
-            </p>
+            <p>Search and filter talent by name, category, location, and experience.</p>
         </div>
-
         <div class="talent-card">
             <h3>Direct Contact</h3>
-            <p>
-                The platform supports direct communication so opportunities can
-                move faster and more efficiently.
-            </p>
+            <p>Coaches and scouts can contact talent directly through the platform.</p>
         </div>
-    </div>
-</section>
-
-<section style="margin-bottom: 40px;">
-    <div class="feature-box" style="
-        background: linear-gradient(135deg, #0f172a, #1e293b);
-        color: white;
-        padding: 30px;
-        border-radius: 18px;
-    ">
-        <h2 style="margin-bottom: 15px;">
-            <i class="fas fa-users"></i> Who This Platform Is For
-        </h2>
-
-        <p style="line-height: 1.8; margin-bottom: 0;">
-            TalentScout is designed for singers, dancers, actors, athletes,
-            performers, and other creative individuals who want to be seen. It is
-            also built for coaches, scouts, recruiters, and organizations looking
-            for fresh talent and meaningful connections.
-        </p>
     </div>
 </section>
 
 <section style="text-align: center;">
     <h2 style="margin-bottom: 15px;">Join the Talent Movement</h2>
     <p style="max-width: 700px; margin: 0 auto 20px; line-height: 1.8;">
-        Whether you are here to showcase your ability or to discover the next big
-        star, TalentScout is built to help opportunity meet talent.
+        Whether you want to showcase your talent or discover the next big star, TalentScout helps opportunity meet talent.
     </p>
-
     <a href="{% url 'signup' %}" class="btn btn-primary">
         <i class="fas fa-user-plus"></i> Get Started
     </a>
 </section>
-
 {% endblock %}

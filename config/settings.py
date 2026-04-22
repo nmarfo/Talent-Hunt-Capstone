@@ -6,23 +6,17 @@ from pathlib import Path
 import environ
 import certifi
 
-
-# Base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-#create a secure connection
 os.environ["SSL_CERT_FILE"] = certifi.where()
 
-# load env
 env = environ.Env()
 environ.Env.read_env()
 
-# SECURITY
 SECRET_KEY = 'django-insecure-r&4*pn^*^vemhw5e#n5!u)c=5e4h=9o@8hej!=mv!x5u_)!px!'
 DEBUG = True
 ALLOWED_HOSTS = []
 
-# APPLICATIONS
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -31,15 +25,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Your apps
     'pages',
     'talent',
-
-    # Security
     'axes',
 ]
 
-# MIDDLEWARE
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -48,30 +38,24 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    # Axes security middleware
     'axes.middleware.AxesMiddleware',
 ]
 
-# AUTHENTICATION BACKENDS
 AUTHENTICATION_BACKENDS = [
     'axes.backends.AxesBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-# AXES CONFIG
 AXES_FAILURE_LIMIT = 5
-AXES_COOLOFF_TIME = 1  # hours
+AXES_COOLOFF_TIME = 1
 AXES_LOCKOUT_TEMPLATE = "lockout.html"
 
-# URL CONFIG
 ROOT_URLCONF = 'config.urls'
 
-# TEMPLATES
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # for shared templates
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -85,7 +69,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# DATABASE
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -93,10 +76,8 @@ DATABASES = {
     }
 }
 
-# CUSTOM USER MODEL
 AUTH_USER_MODEL = 'pages.CustomUser'
 
-# PASSWORD VALIDATION
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -112,31 +93,25 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# INTERNATIONALIZATION
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# STATIC FILES
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
-# AUTH REDIRECTS
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'home'
 
-# MEDIA FILES (IMAGE UPLOADS)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# EMAIL CONFIG (DEVELOPMENT)
-# Email config
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT=587
-EMAIL_USE_TLS=True
-EMAIL_USE_SSL=False
-EMAIL_HOST_USER=env('SMTP_EMAIL')
-EMAIL_HOST_PASSWORD=env('SMTP_PASS')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = env('SMTP_EMAIL')
+EMAIL_HOST_PASSWORD = env('SMTP_PASS')
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

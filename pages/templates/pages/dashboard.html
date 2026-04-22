@@ -11,15 +11,20 @@
 {% if user.role == 'talent' %}
     <p>You are logged in as a talent user.</p>
 
-    <a href="{% url 'create_profile' %}" class="btn btn-primary">
-        <i class="fas fa-user-edit"></i> Create / Edit Profile
-    </a>
-
-    {% if user.talentprofile %}
-        <a href="{% url 'talent_detail' user.talentprofile.pk %}" class="btn btn-secondary">
-            <i class="fas fa-id-card"></i> View My Profile
+    <div style="display:flex; gap:12px; flex-wrap:wrap;">
+        <a href="{% url 'create_profile' %}" class="btn btn-primary">
+            <i class="fas fa-user-edit"></i> Create / Edit Profile
         </a>
-    {% endif %}
+
+        {% if profile %}
+            <a href="{% url 'talent_detail' profile.pk %}" class="btn btn-secondary">
+                <i class="fas fa-id-card"></i> View My Profile
+            </a>
+            <a href="{% url 'upload_gallery_image' %}" class="btn btn-outline">
+                <i class="fas fa-images"></i> Add Gallery Image
+            </a>
+        {% endif %}
+    </div>
 
 {% elif user.role == 'coach' %}
     <p>You are logged in as a coach/scout.</p>

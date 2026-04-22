@@ -3,44 +3,32 @@
 {% block title %}Talent Detail | TalentScout{% endblock %}
 
 {% block content %}
-
 <h1 style="margin-bottom: 15px;">
     <i class="fas fa-user"></i> {{ talent.full_name }}
+    {% if talent.is_verified %}
+        <span title="Verified Talent">⭐</span>
+    {% endif %}
 </h1>
 
 {% if talent.image %}
-    <img 
-        src="{{ talent.image.url }}" 
-        alt="{{ talent.full_name }}" 
-        style="
-            width: 100%;
-            max-width: 450px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-        "
-    >
+    <img src="{{ talent.image.url }}" alt="{{ talent.full_name }}" style="width:100%; max-width:450px; border-radius:12px; margin-bottom:20px;">
 {% else %}
-    <div style="
-        width: 100%;
-        max-width: 450px;
-        height: 250px;
-        background: #e2e8f0;
-        border-radius: 12px;
-        margin-bottom: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #64748b;
-        font-weight: bold;
-    ">
+    <div style="width:100%; max-width:450px; height:250px; background:#e2e8f0; border-radius:12px; margin-bottom:20px; display:flex; align-items:center; justify-content:center; color:#64748b; font-weight:bold;">
         No Image Available
     </div>
 {% endif %}
 
 <div style="margin-bottom: 20px;">
-    <p><strong>Age:</strong> {{ talent.age }}</p>
+    <p><strong>Date of Birth:</strong> {{ talent.date_of_birth|default:"Not specified" }}</p>
+    <p><strong>Age:</strong> {{ talent.age|default:"Not specified" }}</p>
+    <p><strong>Gender:</strong> {{ talent.gender|default:"Not specified" }}</p>
+    <p><strong>Country:</strong> {{ talent.country|default:"Not specified" }}</p>
     <p><strong>Location:</strong> {{ talent.location }}</p>
     <p><strong>Category:</strong> {{ talent.category }}</p>
+    <p><strong>Experience Level:</strong> {{ talent.experience_level|default:"Not specified" }}</p>
+    <p><strong>Height:</strong> {{ talent.height_cm|default:"-" }} cm</p>
+    <p><strong>Weight:</strong> {{ talent.weight_kg|default:"-" }} kg</p>
+    <p><strong>Likes:</strong> {{ talent.likes }}</p>
 </div>
 
 <div style="margin-bottom: 25px;">
@@ -48,34 +36,40 @@
     <p>{{ talent.bio }}</p>
 </div>
 
+{% if talent.skills %}
+    <div style="margin-bottom: 20px;">
+        <h3><i class="fas fa-star"></i> Skills</h3>
+        <p>{{ talent.skills }}</p>
+    </div>
+{% endif %}
+
+{% if talent.achievements %}
+    <div style="margin-bottom: 20px;">
+        <h3><i class="fas fa-trophy"></i> Achievements</h3>
+        <p>{{ talent.achievements }}</p>
+    </div>
+{% endif %}
+
+{% if talent.social_link %}
+    <div style="margin-bottom: 20px;">
+        <h3><i class="fas fa-link"></i> Social / Portfolio</h3>
+        <a href="{{ talent.social_link }}" target="_blank" class="btn btn-secondary">
+            <i class="fas fa-external-link-alt"></i> Visit Link
+        </a>
+    </div>
+{% endif %}
+
 {% if embed_url %}
     <div style="margin-bottom: 25px;">
         <h3><i class="fas fa-video"></i> Highlight Video</h3>
-
-        <div style="
-            position: relative;
-            width: 100%;
-            max-width: 700px;
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
-            border-radius: 12px;
-            margin-top: 10px;
-        ">
+        <div style="position: relative; width: 100%; max-width: 700px; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; margin-top: 10px;">
             <iframe
                 src="{{ embed_url }}"
                 title="Talent Highlight Video"
                 frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen
-                style="
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    border-radius: 12px;
-                ">
+                style="position:absolute; top:0; left:0; width:100%; height:100%; border-radius:12px;">
             </iframe>
         </div>
     </div>
@@ -95,17 +89,7 @@
         <div class="grid grid-3">
             {% for item in gallery_images %}
                 <div class="talent-card">
-                    <img 
-                        src="{{ item.image.url }}" 
-                        alt="{{ item.caption|default:talent.full_name }}"
-                        style="
-                            width: 100%;
-                            height: 220px;
-                            object-fit: cover;
-                            border-radius: 10px;
-                            margin-bottom: 10px;
-                        "
-                    >
+                    <img src="{{ item.image.url }}" alt="{{ item.caption|default:talent.full_name }}" style="width:100%; height:220px; object-fit:cover; border-radius:10px; margin-bottom:10px;">
                     {% if item.caption %}
                         <p><strong>{{ item.caption }}</strong></p>
                     {% endif %}
@@ -121,6 +105,13 @@
     </a>
 {% endif %}
 
+<form method="post" action="{% url 'like_talent' talent.pk %}" style="margin-top: 15px;">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-outline">
+        <i class="fas fa-heart"></i> Like
+    </button>
+</form>
+
 <hr style="margin: 30px 0;">
 
 {% if user.is_authenticated and user.role == 'coach' %}
@@ -130,25 +121,15 @@
     <form method="post">
         {% csrf_token %}
         {{ contact_form.as_p }}
-
         <button type="submit" class="btn btn-primary">
             <i class="fas fa-paper-plane"></i> Send Message
         </button>
     </form>
 {% else %}
-    <div style="
-        background: #fef3c7;
-        padding: 15px;
-        border-radius: 10px;
-        margin-top: 20px;
-    ">
+    <div style="background:#fef3c7; padding:15px; border-radius:10px; margin-top:20px;">
         <p style="margin: 0;">
-            <strong>
-                <i class="fas fa-lock"></i>
-                Only coaches can contact talent.
-            </strong>
+            <strong><i class="fas fa-lock"></i> Only coaches can contact talent.</strong>
         </p>
     </div>
 {% endif %}
-
 {% endblock %}

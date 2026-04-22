@@ -8,7 +8,6 @@ from .forms import TalentProfileForm, ContactTalentForm, TalentImageForm
 from .models import TalentProfile
 
 
-# 🔹 Helper: Convert YouTube links to embed format
 def get_youtube_embed_url(url):
     if not url:
         return None
@@ -27,7 +26,6 @@ def get_youtube_embed_url(url):
     return None
 
 
-# 🔹 Create / Edit Profile
 @login_required
 def create_profile(request):
     if request.user.role != 'talent':
@@ -42,19 +40,15 @@ def create_profile(request):
             talent_profile = form.save(commit=False)
             talent_profile.user = request.user
             talent_profile.save()
-
             messages.success(request, "Profile saved successfully!")
-            return redirect("dashboard")  # 
-
-        else:
-            messages.error(request, "Please fix the errors in the form.")
+            return redirect("dashboard")
+        messages.error(request, "Please fix the errors in the form.")
     else:
         form = TalentProfileForm(instance=profile)
 
     return render(request, "talent/create_profile.html", {"form": form})
 
 
-# 🔹 Upload Gallery Image
 @login_required
 def upload_gallery_image(request):
     if request.user.role != 'talent':
@@ -73,34 +67,40 @@ def upload_gallery_image(request):
             gallery_image = form.save(commit=False)
             gallery_image.talent_profile = profile
             gallery_image.save()
-
             messages.success(request, "Gallery image uploaded successfully!")
             return redirect('talent_detail', pk=profile.pk)
-
-        else:
-            messages.error(request, "Please fix the errors.")
+        messages.error(request, "Please fix the errors.")
     else:
         form = TalentImageForm()
 
     return render(request, "talent/upload_gallery_image.html", {"form": form})
 
 
-# 🔹 Talent List
 def talent_list(request):
+    q = request.GET.get("q")
     category = request.GET.get("category")
+    location = request.GET.get("location")
+    experience_level = request.GET.get("experience_level")
+
+    talents = TalentProfile.objects.all()
+
+    if q:
+        talents = talents.filter(full_name__icontains=q)
 
     if category:
-        talents = TalentProfile.objects.filter(category=category)
-    else:
-        talents = TalentProfile.objects.all()
+        talents = talents.filter(category=category)
+
+    if location:
+        talents = talents.filter(location__icontains=location)
+
+    if experience_level:
+        talents = talents.filter(experience_level=experience_level)
 
     return render(request, "talent/talent_list.html", {"talents": talents})
 
 
-# 🔹 Talent Detail + Contact + Gallery + Video
 def talent_detail(request, pk):
     talent = get_object_or_404(TalentProfile, pk=pk)
-
     embed_url = get_youtube_embed_url(talent.video_link)
     gallery_images = talent.gallery_images.all()
 
@@ -136,8 +136,8 @@ def talent_detail(request, pk):
                 )
                 messages.success(request, "Message sent successfully!")
                 return redirect("talent_detail", pk=talent.pk)
-            else:
-                messages.error(request, "This talent has no email available.")
+
+            messages.error(request, "This talent has no email available.")
     else:
         contact_form = ContactTalentForm()
 
@@ -151,3 +151,15 @@ def talent_detail(request, pk):
             "gallery_images": gallery_images,
         }
     )
+
+
+@login_required
+def like_talent(request, pk):
+    if request.method == "POST":
+        talent = get_object_or_404(TalentProfile, pk=pk)
+        talent.likes += 1
+        talent.save()
+        messages.success(request, "You liked this talent.")
+        return redirect("talent_detail", pk=pk)
+
+    return redirect("talent_list")

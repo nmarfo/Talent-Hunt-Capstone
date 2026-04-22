@@ -6,6 +6,8 @@
 <h1>Available Talent</h1>
 
 <form method="get" style="margin-bottom: 20px;">
+    <input type="text" name="q" placeholder="Search by name" value="{{ request.GET.q }}">
+
     <label for="category"><strong>Category:</strong></label>
     <select name="category" id="category">
         <option value="">All</option>
@@ -17,38 +19,26 @@
         <option value="other">Other</option>
     </select>
 
+    <input type="text" name="location" placeholder="Filter by location" value="{{ request.GET.location }}">
+
+    <label for="experience_level"><strong>Experience:</strong></label>
+    <select name="experience_level" id="experience_level">
+        <option value="">All</option>
+        <option value="beginner">Beginner</option>
+        <option value="intermediate">Intermediate</option>
+        <option value="professional">Professional</option>
+    </select>
+
     <button type="submit" class="btn btn-primary">Filter</button>
 </form>
 
 <div class="grid grid-3" style="margin-top: 20px;">
     {% for talent in talents %}
         <div class="talent-card">
-
             {% if talent.image %}
-                <img 
-                    src="{{ talent.image.url }}" 
-                    alt="{{ talent.full_name }}" 
-                    style="
-                        width: 100%;
-                        height: 220px;
-                        object-fit: cover;
-                        border-radius: 10px;
-                        margin-bottom: 12px;
-                    "
-                >
+                <img src="{{ talent.image.url }}" alt="{{ talent.full_name }}" style="width:100%; height:220px; object-fit:cover; border-radius:10px; margin-bottom:12px;">
             {% else %}
-                <div style="
-                    width: 100%;
-                    height: 220px;
-                    background: #e2e8f0;
-                    border-radius: 10px;
-                    margin-bottom: 12px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: #64748b;
-                    font-weight: bold;
-                ">
+                <div style="width:100%; height:220px; background:#e2e8f0; border-radius:10px; margin-bottom:12px; display:flex; align-items:center; justify-content:center; color:#64748b; font-weight:bold;">
                     No Image
                 </div>
             {% endif %}
@@ -56,20 +46,25 @@
             <h3 style="margin-bottom: 8px;">
                 <a href="{% url 'talent_detail' talent.pk %}">
                     {{ talent.full_name }}
+                    {% if talent.is_verified %}
+                        <span title="Verified Talent">⭐</span>
+                    {% endif %}
                 </a>
             </h3>
 
             <p><strong>Category:</strong> {{ talent.category }}</p>
             <p><strong>Location:</strong> {{ talent.location }}</p>
-            <p><strong>Age:</strong> {{ talent.age }}</p>
+            <p><strong>Age:</strong> {{ talent.age|default:"Not specified" }}</p>
+            <p><strong>Experience:</strong> {{ talent.experience_level|default:"Not specified" }}</p>
 
             {% if talent.video_link %}
                 <p><strong>Video:</strong> Available</p>
             {% endif %}
+
+            <p><strong>Likes:</strong> {{ talent.likes }}</p>
         </div>
     {% empty %}
         <p>No talent profiles found.</p>
     {% endfor %}
 </div>
-
 {% endblock %}

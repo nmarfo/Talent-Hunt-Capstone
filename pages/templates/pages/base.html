@@ -3,11 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
     <title>{% block title %}TalentScout{% endblock %}</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
         * { box-sizing: border-box; }
@@ -15,17 +13,20 @@
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: #eef2f7;
+            background: linear-gradient(180deg, #eef2f7 0%, #f8fafc 100%);
             color: #1e293b;
         }
 
         nav {
-            background: #0f172a;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
             padding: 16px 24px;
             display: flex;
             justify-content: space-between;
             flex-wrap: wrap;
             align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
         .nav-left,
@@ -54,21 +55,41 @@
 
         .container {
             width: 92%;
-            max-width: 1100px;
+            max-width: 1180px;
             margin: 30px auto;
         }
 
         .card {
-            background: white;
+            background: rgba(255,255,255,0.96);
             padding: 28px;
-            border-radius: 14px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-radius: 18px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            backdrop-filter: blur(6px);
+        }
+
+        h1, h2, h3 {
+            margin-top: 0;
+        }
+
+        p {
+            line-height: 1.7;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 14px;
+            margin-top: 6px;
+            margin-bottom: 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 1rem;
+            background: white;
         }
 
         .btn {
             display: inline-block;
             padding: 12px 18px;
-            border-radius: 8px;
+            border-radius: 10px;
             font-weight: bold;
             cursor: pointer;
             text-decoration: none;
@@ -82,14 +103,13 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #2563eb, #1e40af);
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
             color: white;
         }
 
         .btn-primary:hover {
-            background: linear-gradient(135deg, #1d4ed8, #1e3a8a);
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35);
         }
 
         .btn-secondary {
@@ -100,7 +120,6 @@
         .btn-secondary:hover {
             background: #cbd5e1;
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(148, 163, 184, 0.25);
         }
 
         .btn-outline {
@@ -113,7 +132,6 @@
             background: #2563eb;
             color: white;
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
         }
 
         .messages {
@@ -121,8 +139,8 @@
         }
 
         .message {
-            padding: 12px;
-            border-radius: 8px;
+            padding: 12px 14px;
+            border-radius: 10px;
             margin-bottom: 10px;
             font-weight: bold;
         }
@@ -137,14 +155,6 @@
             color: #991b1b;
         }
 
-        footer {
-            margin-top: 40px;
-            background: #0f172a;
-            color: white;
-            text-align: center;
-            padding: 18px;
-        }
-
         .grid {
             display: grid;
             gap: 20px;
@@ -156,24 +166,25 @@
 
         .feature-box,
         .talent-card {
-            background: #f8fafc;
+            background: white;
             border: 1px solid #dbeafe;
-            border-radius: 12px;
+            border-radius: 16px;
             padding: 18px;
             transition: all 0.3s ease;
             transform: translateY(0);
+            overflow: hidden;
         }
 
         .feature-box:hover,
         .talent-card:hover {
             transform: translateY(-6px);
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.10);
             border-color: #93c5fd;
         }
 
         .talent-card img,
         .feature-box img {
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            transition: transform 0.4s ease;
         }
 
         .talent-card:hover img,
@@ -181,7 +192,14 @@
             transform: scale(1.03);
         }
 
-        /* MODAL */
+        footer {
+            margin-top: 40px;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -199,8 +217,8 @@
         .modal-content {
             background: white;
             padding: 25px;
-            border-radius: 12px;
-            max-width: 400px;
+            border-radius: 14px;
+            max-width: 420px;
             width: 100%;
             text-align: center;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
@@ -242,31 +260,19 @@
         }
     </style>
 </head>
-
 <body>
 
 <nav>
     <div class="nav-left">
-        <a href="{% url 'home' %}">
-            <i class="fas fa-star"></i> TalentScout
-        </a>
-        <a href="{% url 'about' %}">
-            <i class="fas fa-info-circle"></i> About
-        </a>
-        <a href="{% url 'talent_list' %}">
-            <i class="fas fa-search"></i> Search Talent
-        </a>
-        <a href="{% url 'contact' %}">
-            <i class="fas fa-envelope"></i> Contact
-        </a>
+        <a href="{% url 'home' %}"><i class="fas fa-star"></i> TalentScout</a>
+        <a href="{% url 'about' %}"><i class="fas fa-info-circle"></i> About</a>
+        <a href="{% url 'talent_list' %}"><i class="fas fa-search"></i> Search Talent</a>
+        <a href="{% url 'contact' %}"><i class="fas fa-envelope"></i> Contact</a>
     </div>
 
     <div class="nav-right">
         {% if user.is_authenticated %}
-            <a href="{% url 'dashboard' %}">
-                <i class="fas fa-chart-line"></i> Dashboard
-            </a>
-
+            <a href="{% url 'dashboard' %}"><i class="fas fa-chart-line"></i> Dashboard</a>
             <a href="#" class="btn btn-outline" onclick="openLogoutModal(event)">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
@@ -283,7 +289,6 @@
 
 <div class="container">
     <div class="card">
-
         {% if messages %}
             <div class="messages">
                 {% for message in messages %}
@@ -294,9 +299,7 @@
             </div>
         {% endif %}
 
-        {% block content %}
-        {% endblock %}
-
+        {% block content %}{% endblock %}
     </div>
 </div>
 
@@ -305,16 +308,12 @@
     <p><a href="{% url 'terms' %}" style="color:#38bdf8;">Terms of Service</a></p>
 </footer>
 
-<!-- LOGOUT MODAL -->
 <div id="logoutModal" class="modal">
     <div class="modal-content">
         <h2>Confirm Logout</h2>
         <p>Are you sure you want to log out?</p>
-
         <div class="modal-actions">
-            <a href="{% url 'logout' %}" class="btn btn-primary">
-                Yes, Logout
-            </a>
+            <a href="{% url 'logout' %}" class="btn btn-primary">Yes, Logout</a>
             <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
         </div>
     </div>
@@ -325,11 +324,9 @@ function openLogoutModal(e) {
     e.preventDefault();
     document.getElementById('logoutModal').classList.add('show');
 }
-
 function closeModal() {
     document.getElementById('logoutModal').classList.remove('show');
 }
-
 window.addEventListener('click', function(event) {
     const modal = document.getElementById('logoutModal');
     if (event.target === modal) {

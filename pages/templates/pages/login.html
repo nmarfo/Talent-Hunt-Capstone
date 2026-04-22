@@ -9,6 +9,8 @@
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn">Login</button>
+    <button type="submit" class="btn btn-primary">
+        <i class="fas fa-sign-in-alt"></i> Login
+    </button>
 </form>
 {% endblock %}
